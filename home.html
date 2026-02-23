@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SBI Craft | Luxury Leather Atelier & Academy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style type="text/css">
+  .animate-fadeIn {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+  ::selection {
+    background: #C6A75E;
+    color: black;
+  }
+</style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        gold: "#C6A75E",
+        leather: "#5A3E2B",
+        espresso: "#2B1D16",
+        ivory: "#F8F5F0",
+        charcoal: "#1C1C1C",
+        black: "#000000",
+      },
+      fontFamily: {
+        serif: ["Playfair Display", "serif"],
+        sans: ["Inter", "sans-serif"],
+      },
+      boxShadow: {
+        soft: "0 10px 30px rgba(0,0,0,0.06)",
+        lift: "0 25px 50px rgba(0,0,0,0.15)",
+      },
+    }
+  }
+}
+</script>
+</head>
+
+<body class="bg-black text-ivory font-sans antialiased scroll-smooth">
+
+<!-- NAVBAR -->
+<header x-data="{ open:false }" 
+        x-intersect="$el.classList.add('animate-fadeIn')"
+        class="fixed top-0 w-full bg-black/80 backdrop-blur-md z-50 border-b border-gold/20 opacity-0 translate-y-6 transition duration-700">
+
+  <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+
+    <div class="text-gold font-serif text-2xl tracking-wide">
+      SBI Craft
+    </div>
+
+    <!-- Desktop -->
+    <div class="hidden lg:flex gap-10 text-ivory/80 text-sm tracking-wide">
+      <a href="#collection" class="hover:text-gold transition">Collection</a>
+      <a href="#academy" class="hover:text-gold transition">Academy</a>
+      <a href="#journey" class="hover:text-gold transition">Journey</a>
+      <a href="#partner" class="hover:text-gold transition">Partner</a>
+    </div>
+
+    <!-- Mobile -->
+    <button @click="open = !open" class="lg:hidden flex flex-col gap-1.5">
+      <span :class="open ? 'rotate-45 translate-y-2 bg-gold' : 'bg-white'" class="w-7 h-[2px] transition-all duration-300"></span>
+      <span :class="open ? 'opacity-0' : 'bg-white'" class="w-7 h-[2px] transition-all duration-300"></span>
+      <span :class="open ? '-rotate-45 -translate-y-2 bg-gold' : 'bg-white'" class="w-7 h-[2px] transition-all duration-300"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div x-show="open"
+       x-transition
+       class="lg:hidden bg-black/95 border-t border-gold/20">
+    <div class="flex flex-col items-center py-8 gap-6 text-lg">
+      <a @click="open=false" class="hover:text-gold transition" href="#collection">Collection</a>
+      <a @click="open=false" class="hover:text-gold transition" href="#academy">Academy</a>
+      <a @click="open=false" class="hover:text-gold transition" href="#journey">Journey</a>
+      <a @click="open=false" class="hover:text-gold transition" href="#partner">Partner</a>
+    </div>
+  </div>
+</header>
+<!-- HERO -->
+<!-- <section class="min-h-screen flex items-center pt-24">
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <div>
+      <h2 class="font-serif text-6xl text-gold leading-tight">SBI Craft</h2>
+      <p class="mt-6 text-xl text-ivory/80">Luxury Leather. Crafted With Intention.</p>
+      <p class="mt-8 text-lg text-ivory/70 max-w-xl">
+        We create timeless leather handbags and empower individuals through
+        structured craftsmanship training programs.
+      </p>
+      <div class="mt-10 flex gap-6">
+        <a href="#collection" class="px-8 py-4 rounded-full bg-gold text-black font-medium shadow-lift">Shop Collection</a>
+        <a href="#academy" class="px-8 py-4 rounded-full border border-gold text-gold hover:bg-gold hover:text-black transition">Join Academy</a>
+      </div>
+    </div>
+    <div class="hidden lg:block">
+      <div class="aspect-[4/5] rounded-3xl bg-gradient-to-br from-leather to-espresso shadow-lift"></div>
+    </div>
+  </div>
+</section> -->
+  <!-- ================= HERO SECTION - LUXURY EDITION ================= -->
+  <section x-data="heroCrossfade()" x-init="init()" class="relative min-h-screen bg-black overflow-hidden flex items-center py-28 sm:py-36">
+
+
+  <!-- PARTICLES -->
+  <canvas id="heroParticles" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+
+  <!-- LIGHT STREAKS -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-lightStreak"></div>
+  </div>
+
+  <!-- HERO CONTENT -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center w-full">
+
+    <!-- IMAGE SLIDER -->
+    <div class="order-1 lg:order-2 flex justify-center">
+      <div class="relative w-[90%] sm:w-[75%] lg:w-full h-[70vh] lg:h-[85vh] rounded-3xl overflow-hidden shadow-2xl"
+           :style="`transform: translateY(${parallaxOffset}px); transition: transform 0.6s ease-out;`">
+
+        <!-- IMAGES -->
+        <template x-for="(img, i) in images" :key="i">
+          <div
+            x-show="current === i"
+            x-transition:enter="transition-opacity duration-[4000ms] ease-in-out"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity duration-[4000ms] ease-in-out absolute inset-0"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="absolute inset-0"
+          >
+            <img :src="img"
+                 class="w-full h-full object-cover scale-105 transition-transform duration-[8000ms] ease-out">
+          </div>
+        </template>
+
+        <!-- GOLDEN SHIMMER OVERLAY -->
+        <div class="absolute inset-0 pointer-events-none shimmer-overlay"></div>
+
+      </div>
+    </div>
+
+    <!-- TEXT SIDE -->
+    <div class="text-center lg:text-left order-2 lg:order-1 max-w-xl">
+      <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl text-gold leading-[1.05] tracking-tight opacity-0 translate-y-6 max-w-md mx-auto lg:mx-0 transition-all duration-700" x-ref="headline">
+        SBI Craft
+      </h1>
+
+      <p class="mt-4 text-lg sm:text-xl text-ivory/80 font-light tracking-wide opacity-0 translate-y-6 max-w-md mx-auto lg:mx-0 transition-all duration-700" x-ref="subtitle">
+        Luxury Leather. Crafted With Intention.
+      </p>
+
+      <p class="mt-6 text-base sm:text-lg text-ivory/60 leading-relaxed max-w-md mx-auto lg:mx-0 opacity-0 translate-y-6 transition-all duration-700" x-ref="description">
+        Handcrafted leather handbags designed for timeless elegance.
+        We create pieces that carry legacy — and train the next generation
+        of master leather artisans.
+      </p>
+
+      <div class="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-6 opacity-0 translate-y-6 transition-all duration-700 pb-20 lg:pb-20" x-ref="buttons">
+        <a href="#collection" class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+          Shop Collection
+        </a>
+        <a href="#academy" class="px-10 py-4 rounded-full border border-gold text-gold hover:bg-gold hover:text-black transition duration-300">
+          Join Academy
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DOTS NAVIGATION -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex gap-3">
+    <template x-for="(img, i) in images" :key="i">
+      <button @click="goTo(i)"
+              :class="current === i ? 'bg-gold w-8':'bg-white/40 w-3'"
+              class="h-3 rounded-full transition-all duration-300">
+      </button>
+    </template>
+  </div>
+
+</section>
+
+<script>
+function heroCrossfade() {
+  return {
+    images: [
+      'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1400&q=80'
+    ],
+    current: 0,
+    interval: null,
+    parallaxOffset: 0,
+
+    init() {
+      if (this.interval) clearInterval(this.interval);
+
+      this.interval = setInterval(() => {
+        this.current = (this.current + 1) % this.images.length;
+      }, 8000);
+
+      window.addEventListener('scroll', () => {
+        this.parallaxOffset = window.scrollY * 0.15;
+      });
+
+      setTimeout(()=>this.$refs.headline.classList.remove('opacity-0','translate-y-6'),200)
+      setTimeout(()=>this.$refs.subtitle.classList.remove('opacity-0','translate-y-6'),400)
+      setTimeout(()=>this.$refs.description.classList.remove('opacity-0','translate-y-6'),600)
+      setTimeout(()=>this.$refs.buttons.classList.remove('opacity-0','translate-y-6'),800)
+
+      this.initParticles();
+    },
+
+    goTo(i) {
+      this.current = i;
+    },
+
+    initParticles() {
+      const canvas = document.getElementById('heroParticles');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = Array.from({length: 50}, () => ({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*2+1,
+        dx: (Math.random()-0.5)*0.3,
+        dy: (Math.random()-0.5)*0.3
+      }));
+
+      function animate(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p=>{
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fillStyle='rgba(255,255,255,0.08)';
+          ctx.fill();
+          p.x+=p.dx; p.y+=p.dy;
+          if(p.x<0||p.x>canvas.width) p.dx*=-1;
+          if(p.y<0||p.y>canvas.height) p.dy*=-1;
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+  }
+}
+</script>
+
+<style>
+@keyframes lightStreak {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-lightStreak {
+  animation: lightStreak 12s linear infinite;
+}
+
+/* GOLDEN SHIMMER */
+.shimmer-overlay {
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(212,175,55,0.08) 45%,
+    rgba(255,215,0,0.12) 50%,
+    rgba(212,175,55,0.08) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmerMove 18s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes shimmerMove {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+</style>
+
+
+
+<!-- ================= SIGNATURE COLLECTION - PREMIUM WITH QUICK VIEW ================= -->
+<section id="collection" class="py-28 sm:py-36 border-t border-gold/20 bg-black">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- SECTION TITLE -->
+    <h2 class="font-serif text-3xl sm:text-5xl text-gold text-center mb-16 sm:mb-20">
+      Signature Collection
+    </h2>
+
+    <!-- PRODUCT GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+
+      <!-- PRODUCT CARD 1 -->
+      <div x-data="{ open:false }" class="group relative">
+        <button @click="open=true" class="w-full text-left focus:outline-none">
+          <div class="relative aspect-square rounded-3xl overflow-hidden shadow-soft 
+                      transition-all duration-500 group-hover:-translate-y-3 
+                      group-hover:shadow-lift">
+            <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=80" 
+                 class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-1000 ease-out">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gold/20 via-transparent to-transparent 
+                        opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          </div>
+          <div class="mt-6">
+            <h3 class="text-lg sm:text-xl font-semibold group-hover:text-gold transition duration-300">The Executive Tote</h3>
+            <p class="mt-1 text-ivory/70 tracking-wide"><span class="text-ivory/40">₦</span>85,000</p>
+          </div>
+        </button>
+
+        <!-- QUICK VIEW MODAL -->
+        <div x-show="open" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div @click.away="open=false" class="bg-black rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
+            <div class="relative">
+              <button @click="open=false" class="absolute top-4 right-4 text-gold text-2xl font-bold">&times;</button>
+              <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=80" class="w-full h-96 object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-serif text-gold mb-2">The Executive Tote</h3>
+              <p class="text-ivory/70 mb-4">Luxury handcrafted leather tote designed for elegance and durability.</p>
+              <p class="text-ivory/70 mb-6"><span class="text-ivory/40">₦</span>85,000</p>
+              <a href="/products/executive-tote" class="inline-block px-8 py-3 bg-gold text-black rounded-full font-medium shadow-lift hover:scale-105 transition duration-300">
+                View Full Product
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT CARD 2 -->
+      <div x-data="{ open:false }" class="group relative">
+        <button @click="open=true" class="w-full text-left focus:outline-none">
+          <div class="relative aspect-square rounded-3xl overflow-hidden shadow-soft 
+                      transition-all duration-500 group-hover:-translate-y-3 
+                      group-hover:shadow-lift">
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80" 
+                 class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-1000 ease-out">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gold/20 via-transparent to-transparent 
+                        opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          </div>
+          <div class="mt-6">
+            <h3 class="text-lg sm:text-xl font-semibold group-hover:text-gold transition duration-300">The Classic Crossbody</h3>
+            <p class="mt-1 text-ivory/70 tracking-wide"><span class="text-ivory/40">₦</span>55,000</p>
+          </div>
+        </button>
+
+        <!-- QUICK VIEW MODAL -->
+        <div x-show="open" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div @click.away="open=false" class="bg-black rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
+            <div class="relative">
+              <button @click="open=false" class="absolute top-4 right-4 text-gold text-2xl font-bold">&times;</button>
+              <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80" class="w-full h-96 object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-serif text-gold mb-2">The Classic Crossbody</h3>
+              <p class="text-ivory/70 mb-4">Timeless crossbody bag, ideal for daily elegance and comfort.</p>
+              <p class="text-ivory/70 mb-6"><span class="text-ivory/40">₦</span>55,000</p>
+              <a href="/products/classic-crossbody" class="inline-block px-8 py-3 bg-gold text-black rounded-full font-medium shadow-lift hover:scale-105 transition duration-300">
+                View Full Product
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT CARD 3 -->
+      <div x-data="{ open:false }" class="group relative">
+        <button @click="open=true" class="w-full text-left focus:outline-none">
+          <div class="relative aspect-square rounded-3xl overflow-hidden shadow-soft 
+                      transition-all duration-500 group-hover:-translate-y-3 
+                      group-hover:shadow-lift">
+            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80" 
+                 class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-1000 ease-out">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gold/20 via-transparent to-transparent 
+                        opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          </div>
+          <div class="mt-6">
+            <h3 class="text-lg sm:text-xl font-semibold group-hover:text-gold transition duration-300">The Statement Mini</h3>
+            <p class="mt-1 text-ivory/70 tracking-wide"><span class="text-ivory/40">₦</span>45,000</p>
+          </div>
+        </button>
+
+        <!-- QUICK VIEW MODAL -->
+        <div x-show="open" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div @click.away="open=false" class="bg-black rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
+            <div class="relative">
+              <button @click="open=false" class="absolute top-4 right-4 text-gold text-2xl font-bold">&times;</button>
+              <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80" class="w-full h-96 object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-serif text-gold mb-2">The Statement Mini</h3>
+              <p class="text-ivory/70 mb-4">Chic mini bag for statement looks, handcrafted for style and utility.</p>
+              <p class="text-ivory/70 mb-6"><span class="text-ivory/40">₦</span>45,000</p>
+              <a href="/products/statement-mini" class="inline-block px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+                View Full Product
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXPLORE BUTTON -->
+    <div class="text-center mt-16 sm:mt-20">
+      <a href="/collection" class="inline-block px-12 py-4 rounded-full 
+         bg-gold text-black font-medium shadow-lift hover:scale-105 transition duration-300">
+        Explore Full Collection
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- ================= ACADEMY SECTION - PREMIUM TRAINING HUB ================= -->
+<section id="academy" class="py-28 sm:py-36 bg-black border-t border-gold/20">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- SECTION TITLE -->
+    <h2 class="font-serif text-3xl sm:text-5xl text-gold text-center mb-16 sm:mb-20">
+      SBI Craft Academy
+    </h2>
+
+    <!-- ================= PREMIUM ACADEMY VIDEO ================= -->
+    <div 
+      x-data="{ playing:false }"
+      x-intersect="$el.classList.add('opacity-100','translate-y-0')"
+      class="mt-16 sm:mt-24 mb-15 opacity-0 translate-y-8 transition-all duration-1000 ease-out"
+    >
+
+      <div class="text-center max-w-3xl mx-auto mb-14 px-4">
+        <p class="text-ivory/70 text-base sm:text-lg leading-relaxed">
+          Step inside <span class="text-gold font-medium">SBI Craft Academy</span> 
+          and witness the transformation of passion into mastery.
+        </p>
+      </div>
+
+      <div class="relative max-w-5xl mx-auto px-4">
+
+        <div class="absolute -inset-1 bg-gradient-to-r from-gold/30 via-gold/10 to-gold/30 blur-xl opacity-40 rounded-3xl"></div>
+
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-gold/20 bg-black">
+
+          <div class="aspect-video relative">
+
+            <!-- Custom Thumbnail -->
+            <template x-if="!playing">
+              <div 
+                @click="playing = true"
+                class="relative w-full h-full cursor-pointer group"
+              >
+                <img 
+                  src="academy-thumb.jpg"
+                  alt="SBI Craft Academy"
+                  class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                >
+
+                <!-- Cinematic Dark Gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30"></div>
+
+                <!-- Elegant Play Button -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition duration-300">
+                    <svg class="w-8 h-8 text-black ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Iframe -->
+            <template x-if="playing">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1"
+                title="SBI Craft Academy Introduction"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ================= THE JOURNEY SO FAR & PARTNERS ================= -->
+<section id="journey" class="relative bg-gradient-to-b from-black via-[#0b0b0b] to-black py-15 px-6 text-ivory">
+  <div class="max-w-5xl mx-auto text-center space-y-6">
+
+    <!-- TITLE -->
+    <h2 class="font-serif text-4xl text-gold mb-2">The Journey So Far</h2>
+    <p class="text-ivory/60 leading-relaxed max-w-3xl mx-auto text-base sm:text-lg">
+      From our humble beginnings to becoming a premium leather brand and academy, every step has been about excellence, mentorship, and community.
+    </p>
+  </div>
+
+  <!-- JOURNEY STATS / HIGHLIGHTS -->
+  <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12 max-w-6xl mx-auto text-center">
+
+    <div class="space-y-2">
+      <h3 class="text-3xl font-serif text-gold"><span x-data="{count:0}" x-init="setInterval(()=>{ if(count<150) count++; },10)">150</span>+</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">Students Trained</p>
+    </div>
+
+    <div class="space-y-2">
+      <h3 class="text-3xl font-serif text-gold"><span x-data="{count:0}" x-init="setInterval(()=>{ if(count<25) count++; },50)">25</span>+</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">Master Artisans</p>
+    </div>
+
+    <div class="space-y-2">
+      <h3 class="text-3xl font-serif text-gold"><span x-data="{count:0}" x-init="setInterval(()=>{ if(count<80) count++; },20)">80</span>+</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">Events & Workshops</p>
+    </div>
+
+    <div class="space-y-2">
+      <h3 class="text-3xl font-serif text-gold"><span x-data="{count:0}" x-init="setInterval(()=>{ if(count<10) count++; },100)">10</span>+</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">Awards & Recognitions</p>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- ================= TRAINING PROGRAMS SECTION ================= -->
+    <section class="py-28 sm:py-36 bg-black border-t border-gold/10">
+
+      <!-- Section Intro -->
+      <div class="text-center mb-24 px-6">
+        <div class="max-w-3xl mx-auto">
+          <h3 class="font-serif text-3xl sm:text-4xl text-gold mb-6">
+            Curated Learning Experiences
+          </h3>
+          <div class="w-16 h-px bg-gold/40 mx-auto mb-8"></div>
+          <p class="text-ivory/60 text-base sm:text-lg leading-relaxed">
+            Each program is intentionally designed to guide you from foundational
+            techniques to refined leather craftsmanship — whether online or
+            inside our physical studio.
+          </p>
+        </div>
+      </div>
+
+      <!-- Course Cards -->
+      <div class="max-w-6xl mx-auto px-6 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- COURSE CARD -->
+        <a href="#" 
+           class="group relative rounded-3xl overflow-hidden border border-gold/20 bg-[#0c0c0c] hover:border-gold/40 transition duration-500 shadow-lg hover:shadow-2xl transform hover:-translate-y-2"
+           x-intersect="$el.classList.add('opacity-100','translate-y-0')"
+           class="opacity-0 translate-y-8 transition-all duration-700 ease-out"
+        >
+
+          <!-- Badge -->
+          <div class="absolute top-5 left-5 z-20 px-4 py-1 text-xs tracking-wide uppercase rounded-full bg-gold text-black font-medium shadow-md">
+            Online • Zoom
+          </div>
+
+          <!-- Image -->
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1593032465171-8f7f4c4e3c6b?q=80&w=800"
+                 alt="Online Leather Course"
+                 class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+          </div>
+
+          <!-- Content -->
+          <div class="p-8 space-y-4">
+
+            <h4 class="font-serif text-xl text-gold">
+              Beginner Leather Craft
+            </h4>
+
+            <p class="text-ivory/60 text-sm leading-relaxed">
+              Learn the fundamentals of leather cutting, stitching,
+              finishing, and product construction from the comfort of your home.
+            </p>
+
+            <div class="text-ivory/80 font-medium">
+              ₦120,000
+            </div>
+
+            <!-- Subtle Learn More -->
+            <div class="pt-4 text-sm text-gold opacity-0 group-hover:opacity-100 transition duration-500">
+              Discover Program →
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- COURSE CARD 2 -->
+        <a href="#" 
+           class="group relative rounded-3xl overflow-hidden border border-gold/20 bg-[#0c0c0c] hover:border-gold/40 transition duration-500 shadow-lg hover:shadow-2xl transform hover:-translate-y-2"
+           x-intersect="$el.classList.add('opacity-100','translate-y-0')"
+           class="opacity-0 translate-y-8 transition-all duration-700 ease-out"
+        >
+
+          <div class="absolute top-5 left-5 z-20 px-4 py-1 text-xs tracking-wide uppercase rounded-full bg-gold text-black font-medium shadow-md">
+            Physical • Lagos Studio
+          </div>
+
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800"
+                 alt="Physical Leather Workshop"
+                 class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+          </div>
+
+          <div class="p-8 space-y-4">
+
+            <h4 class="font-serif text-xl text-gold">
+              Advanced Craft Mastery
+            </h4>
+
+            <p class="text-ivory/60 text-sm leading-relaxed">
+              Intensive in-studio mentorship focused on premium bag construction,
+              detailing, finishing, and luxury presentation.
+            </p>
+
+            <div class="text-ivory/80 font-medium">
+              ₦250,000
+            </div>
+
+            <div class="pt-4 text-sm text-gold opacity-0 group-hover:opacity-100 transition duration-500">
+              Discover Program →
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- COURSE CARD 3 -->
+        <a href="#" 
+           class="group relative rounded-3xl overflow-hidden border border-gold/20 bg-[#0c0c0c] hover:border-gold/40 transition duration-500 shadow-lg hover:shadow-2xl transform hover:-translate-y-2"
+           x-intersect="$el.classList.add('opacity-100','translate-y-0')"
+           class="opacity-0 translate-y-8 transition-all duration-700 ease-out"
+        >
+
+          <div class="absolute top-5 left-5 z-20 px-4 py-1 text-xs tracking-wide uppercase rounded-full bg-gold text-black font-medium shadow-md">
+            Hybrid • Studio + Online
+          </div>
+
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1616628182503-2d8e9f6f3e3d?q=80&w=800"
+                 alt="Hybrid Leather Course"
+                 class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+          </div>
+
+          <div class="p-8 space-y-4">
+
+            <h4 class="font-serif text-xl text-gold">
+              Professional Brand Builder
+            </h4>
+
+            <p class="text-ivory/60 text-sm leading-relaxed">
+              Master craftsmanship and learn how to position, price,
+              and present your leather brand professionally.
+            </p>
+
+            <div class="text-ivory/80 font-medium">
+              ₦300,000
+            </div>
+
+            <div class="pt-4 text-sm text-gold opacity-0 group-hover:opacity-100 transition duration-500">
+              Discover Program →
+            </div>
+
+          </div>
+
+        </a>
+
+      </div>
+
+      <!-- Elegant Enrollment CTA -->
+      <div class="text-center mt-24 px-6">
+
+        <div class="max-w-xl mx-auto space-y-6">
+
+          <p class="text-ivory/60 text-base sm:text-lg">
+            Ready to begin your journey into refined craftsmanship?
+          </p>
+
+          <a href="#"
+             class="inline-block px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+            Apply for Enrollment
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+<!-- ================= COMMUNITY & ALUMNI STORIES - CINEMATIC ================= -->
+<section x-data="{
+  currentSlide: 0,
+  slides: 3,
+  progress: 0,
+  interval: null,
+  progressInterval: null,
+  paused: false,
+  startX: 0,
+  startAuto() {
+    this.interval = setInterval(() => { if (!this.paused) this.next() }, 6000)
+    this.progressInterval = setInterval(() => { if (!this.paused && this.progress < 100) this.progress += 1.7 }, 100)
+  },
+  next() { this.currentSlide = (this.currentSlide + 1) % this.slides; this.progress = 0 },
+  prev() { this.currentSlide = (this.currentSlide - 1 + this.slides) % this.slides; this.progress = 0 },
+  pause() { this.paused = true },
+  resume() { this.paused = false },
+  handleTouchStart(e) { this.startX = e.touches[0].clientX; this.pause() },
+  handleTouchEnd(e) { let endX=e.changedTouches[0].clientX; if(this.startX-endX>50)this.next(); if(endX-this.startX>50)this.prev(); this.resume() }
+}" x-init="startAuto()" class="relative bg-[#080808] text-ivory overflow-hidden py-28 sm:py-36">
+
+<!-- SECTION INTRO -->
+<div class="max-w-5xl mx-auto text-center mb-16 px-6">
+  <h2 class="font-serif text-4xl text-gold mb-4">Our Community & Alumni</h2>
+  <p class="text-ivory/60 leading-relaxed max-w-2xl mx-auto">
+    Stories of passion, growth, and craftsmanship from our students and graduates — celebrating their journey with SBI Craft.
+  </p>
+</div>
+
+<!-- SLIDER WRAPPER -->
+<div 
+class="max-w-6xl mx-auto px-6 relative"
+@mouseenter="pause()" @mouseleave="resume()"
+@touchstart="handleTouchStart" @touchend="handleTouchEnd"
+>
+
+<!-- SLIDES -->
+<div class="overflow-hidden rounded-3xl shadow-2xl relative">
+  <div 
+    class="flex transition-transform duration-1000 ease-[cubic-bezier(.77,0,.18,1)]"
+    :style="'transform: translateX(-' + (currentSlide * 100) + '%)'"
+  >
+    <!-- Slide 1 -->
+    <div class="min-w-full grid lg:grid-cols-2 gap-12 items-center relative">
+      <div class="relative overflow-hidden rounded-3xl border border-gold/20 shadow-2xl aspect-[4/3]">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800"
+             class="w-full h-full object-cover scale-105 transform transition-transform duration-[12000ms] ease-in-out animate-kenburns">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40 pointer-events-none"></div>
+      </div>
+
+      <div class="opacity-0 translate-y-6 transition-all duration-700" x-intersect.once="$el.classList.remove('opacity-0','translate-y-6')">
+        <h3 class="font-serif text-xl sm:text-2xl lg:text-3xl mb-4">From Student to Brand Founder</h3>
+        <!-- Poster Meta -->
+        <div class="flex items-center gap-3 text-sm text-ivory/50 mb-4 tracking-wide">
+          <span class="text-gold">Aisha Bello</span>
+          <span>•</span>
+          <span class="text-gold/50">Trainee</span>
+          <span>•</span>
+          <span class="text-ivory/25">January 12, 2026</span>
+        </div>
+        <p class="text-ivory/60 mb-6 leading-relaxed">
+          What started as curiosity evolved into a profitable leather brand — a testament to focus, creativity, and passion.
+        </p>
+
+        <!-- Primary CTA -->
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
+          
+          <a href="#academy"
+             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             Enroll Now
+          </a>
+
+          <a href="/blog/student-to-brand-founder"
+             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             View More Stories →
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="min-w-full grid lg:grid-cols-2 gap-12 items-center relative">
+      <div class="relative overflow-hidden rounded-3xl border border-gold/20 shadow-2xl aspect-[4/3]">
+        <iframe class="w-full h-full transform scale-105 transition-transform duration-[12000ms] ease-in-out animate-kenburns" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40 pointer-events-none"></div>
+      </div>
+
+      <div class="opacity-0 translate-y-6 transition-all duration-700" x-intersect.once="$el.classList.remove('opacity-0','translate-y-6')">
+        <h3 class="font-serif text-xl sm:text-2xl lg:text-3xl mb-4">Creative Transformation</h3>
+        <!-- Poster Meta -->
+        <div class="flex items-center gap-3 text-sm text-ivory/50 mb-4 tracking-wide">
+          <span class="text-gold">Aisha Bello</span>
+          <span>•</span>
+          <span class="text-gold/50">Trainee</span>
+          <span>•</span>
+          <span>January 12, 2026</span>
+        </div>
+        <p class="text-ivory/60 mb-6 leading-relaxed">
+          Structured mentorship transformed a hobby into a sustainable leather brand, unlocking both skill and confidence.
+        </p>
+
+        <!-- Primary CTA -->
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
+          
+          <a href="#academy"
+             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             Enroll Now
+          </a>
+
+          <a href="/blog/student-to-brand-founder"
+             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             View More Stories →
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="min-w-full grid lg:grid-cols-2 gap-12 items-center relative">
+      <div class="relative overflow-hidden rounded-3xl border border-gold/20 shadow-2xl aspect-[4/3]">
+        <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=800"
+             class="w-full h-full object-cover scale-105 transform transition-transform duration-[12000ms] ease-in-out animate-kenburns">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40 pointer-events-none"></div>
+      </div>
+
+      <div class="opacity-0 translate-y-6 transition-all duration-700" x-intersect.once="$el.classList.remove('opacity-0','translate-y-6')">
+        <h3 class="font-serif text-xl sm:text-2xl lg:text-3xl mb-4">Building While Working Full-Time</h3>
+        <!-- Poster Meta -->
+        <div class="flex items-center gap-3 text-sm text-ivory/50 mb-4 tracking-wide">
+          <span class="text-gold">Aisha Bello</span>
+          <span>•</span>
+          <span class="text-gold/50">Trainee</span>
+          <span>•</span>
+          <span>January 12, 2026</span>
+        </div>
+        <p class="text-ivory/60 mb-6 leading-relaxed">
+          Flexible online modules enabled steady growth while maintaining full-time employment, proving dedication pays off.
+        </p>
+
+        <!-- Primary CTA -->
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
+          
+          <a href="#academy"
+             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             Enroll Now
+          </a>
+
+          <a href="/blog/student-to-brand-founder"
+             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             View More Stories →
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CINEMATIC PROGRESS BAR -->
+  <div class="mt-12 max-w-xl mx-auto">
+    <div class="h-px bg-gold/20 rounded-full overflow-hidden">
+      <div class="h-px bg-gold rounded-full transition-all duration-100" :style="'width:' + progress + '%'"></div>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<style>
+@keyframes kenburns {
+  0% { transform: scale(1) translate(0,0); }
+  50% { transform: scale(1.05) translate(-1%, -1%); }
+  100% { transform: scale(1) translate(0,0); }
+}
+.animate-kenburns { animation: kenburns 12s ease-in-out infinite; }
+</style>
+
+
+
+<!-- ================= BECOME A PARTNER ================= -->
+<section id="partner" class="relative bg-black py-28 sm:py-36 px-6 text-ivory">
+  <div class="max-w-5xl mx-auto text-center space-y-6">
+
+    <!-- TITLE -->
+    <h2 class="font-serif text-4xl text-gold mb-2">Become a Partner</h2>
+    <p class="text-ivory/60 leading-relaxed max-w-3xl mx-auto text-base sm:text-lg">
+      Join us in empowering the next generation of master leather artisans. Whether you are a brand, supplier, or philanthropist, your collaboration can leave a lasting impact.
+    </p>
+
+  </div>
+
+  <!-- FEATURE HIGHLIGHTS -->
+  <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto text-center">
+
+    <div class="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-sm border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2 cursor-pointer">
+      <img src="https://via.placeholder.com/80" alt="Collaborate" class="mx-auto mb-4">
+      <h3 class="text-xl font-semibold text-gold">Collaborate</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">
+        Partner with our academy to offer workshops, training, or co-branded events.
+      </p>
+    </div>
+
+    <div class="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-sm border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2 cursor-pointer">
+      <img src="https://via.placeholder.com/80" alt="Support" class="mx-auto mb-4">
+      <h3 class="text-xl font-semibold text-gold">Support</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">
+        Contribute resources, materials, or funding to help our artisans thrive.
+      </p>
+    </div>
+
+    <div class="p-8 rounded-3xl bg-white/[0.03] backdrop-blur-sm border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2 cursor-pointer">
+      <img src="https://via.placeholder.com/80" alt="Sponsor" class="mx-auto mb-4">
+      <h3 class="text-xl font-semibold text-gold">Sponsor</h3>
+      <p class="text-ivory/60 text-sm sm:text-base">
+        Gain visibility while helping to scale our training programs and leather product initiatives.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- PARTNERS & SPONSORS -->
+  <div class="mt-24 max-w-6xl mx-auto text-center">
+    <h4 class="font-serif text-2xl text-gold mb-8">Our Trusted Partners & Sponsors</h4>
+    <div class="flex flex-wrap justify-center items-center gap-8">
+      <img src="https://via.placeholder.com/120x60?text=Brand+1" alt="Brand 1" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="https://via.placeholder.com/120x60?text=Brand+2" alt="Brand 2" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="https://via.placeholder.com/120x60?text=Brand+3" alt="Brand 3" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="https://via.placeholder.com/120x60?text=Brand+4" alt="Brand 4" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="https://via.placeholder.com/120x60?text=Brand+5" alt="Brand 5" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+    </div>
+  </div>
+
+  <!-- CTA BUTTON -->
+  <div class="text-center mt-16">
+    <a href="#contact"
+       class="inline-block px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+      Partner With Us
+    </a>
+  </div>
+</section>
+
+
+
+<!-- BLOG -->
+<section id="journal" class="py-28 sm:py-36 bg-[#0b0b0b] text-ivory px-6">
+
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Section Header -->
+    <div class="text-center mb-20">
+      <h2 class="font-serif text-4xl sm:text-5xl text-gold">
+        The Craft Journal
+      </h2>
+      <p class="mt-6 text-ivory/60 max-w-2xl mx-auto leading-relaxed">
+        Insights on leather craftsmanship, luxury design, artisan stories,
+        and the journey behind every SBI Craft creation.
+      </p>
+    </div>
+
+    <!-- Blog Cards -->
+    <div class="grid md:grid-cols-3 gap-10">
+
+      <!-- Blog Card 1 -->
+      <article class="group rounded-3xl overflow-hidden bg-white/[0.03] border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2">
+
+        <div class="overflow-hidden">
+          <img src="https://i.ytimg.com/vi/1E1do4gEfY0/maxresdefault.jpg"
+               class="w-full h-64 object-cover group-hover:scale-105 transition duration-700"
+               alt="Leather Crafting Process">
+        </div>
+
+        <div class="p-8">
+          <span class="text-sm text-gold tracking-wide">
+            Craftsmanship
+          </span>
+
+          <h3 class="mt-4 font-serif text-xl sm:text-2xl lg:text-3xl text-gold leading-snug">
+            The Art of Hand-Stitching Luxury Leather
+          </h3>
+
+          <p class="mt-4 text-ivory/60 leading-relaxed text-sm">
+            Discover why traditional saddle stitching remains the gold
+            standard in high-end leather goods.
+          </p>
+
+          <a href="/blog/art-of-hand-stitching"
+             class="inline-block mt-6 text-gold text-sm tracking-wide hover:underline">
+             Read More →
+          </a>
+        </div>
+      </article>
+
+      <!-- Blog Card 2 -->
+      <article class="group rounded-3xl overflow-hidden bg-white/[0.03] border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2">
+
+        <div class="overflow-hidden">
+          <img src="https://www.wikihow.com/images/thumb/8/86/Clean-Wallet-Leather-Step-13.jpg/aid10719129-v4-1200px-Clean-Wallet-Leather-Step-13.jpg"
+               class="w-full h-64 object-cover group-hover:scale-105 transition duration-700"
+               alt="Luxury Leather Care">
+        </div>
+
+        <div class="p-8">
+          <span class="text-sm text-gold tracking-wide">
+            Care Guide
+          </span>
+
+          <h3 class="mt-4 font-serif text-xl sm:text-2xl lg:text-3xl text-gold leading-snug">
+            How to Preserve Your Leather for Decades
+          </h3>
+
+          <p class="mt-4 text-ivory/60 leading-relaxed text-sm">
+            Proper conditioning, storage, and care techniques that protect
+            your investment pieces.
+          </p>
+
+          <a href="/blog/leather-care-guide"
+             class="inline-block mt-6 text-gold text-sm tracking-wide hover:underline">
+             Read More →
+          </a>
+        </div>
+      </article>
+
+      <!-- Blog Card 3 -->
+      <article class="group rounded-3xl overflow-hidden bg-white/[0.03] border border-gold/10 hover:border-gold/40 transition duration-500 hover:-translate-y-2">
+
+        <div class="overflow-hidden">
+          <img src="https://ik.imagekit.io/storybird/images/5b593b2a-318b-4a24-b082-5734022abe9b/1_670187010.png?tr=q-80"
+               class="w-full h-64 object-cover group-hover:scale-105 transition duration-700"
+               alt="Artisan Story">
+        </div>
+
+        <div class="p-8">
+          <span class="text-sm text-gold tracking-wide">
+            Artisan Story
+          </span>
+
+          <h3 class="mt-4 font-serif text-xl sm:text-2xl lg:text-3xl text-gold leading-snug">
+            Behind the Atelier: Meet Our Master Craftsmen
+          </h3>
+
+          <p class="mt-4 text-ivory/60 leading-relaxed text-sm">
+            The dedication, patience, and discipline behind every handcrafted
+            SBI piece.
+          </p>
+
+          <a href="/blog/master-craftsmen"
+             class="inline-block mt-6 text-gold text-sm tracking-wide hover:underline">
+             Read More →
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-20">
+      <a href="/blog"
+         class="px-10 py-4 rounded-full border border-gold text-gold hover:bg-gold hover:text-black transition duration-300">
+         Explore the Journal
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="py-28 sm:py-36 bg-black border-t border-gold/20">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- SECTION TITLE -->
+    <div class="text-center mb-16">
+      <h2 class="font-serif text-4xl text-gold mb-2">Get in Touch</h2>
+      <p class="text-ivory/60 max-w-3xl mx-auto text-base sm:text-lg">
+        Whether you’re looking to explore our signature collection, enroll in our academy, or partner with us, we’re here to assist you.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-16">
+
+      <!-- CONTACT INFO -->
+      <div class="space-y-8">
+        <div class="space-y-2">
+          <h3 class="text-xl font-semibold text-gold">Visit Us</h3>
+          <p class="text-ivory/60 text-sm sm:text-base">123 Leather Street, Lagos, Nigeria</p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-xl font-semibold text-gold">Email Us</h3>
+          <p class="text-ivory/60 text-sm sm:text-base">info@sbi-craft.com</p>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-xl font-semibold text-gold">Call Us</h3>
+          <p class="text-ivory/60 text-sm sm:text-base">+234 800 123 4567</p>
+        </div>
+
+        <!-- SOCIAL ICONS -->
+        <div class="flex gap-6 mt-6 justify-center items-center lg:justify-start">
+          <a href="https://x.com/YOURUSERNAME"
+           target="_blank"
+           aria-label="X"
+           class="text-gold hover:text-ivory/80 transition duration-300">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="currentColor"
+                 class="h-6 w-6">
+              <path d="M18.244 2H21l-6.54 7.48L22 22h-6.828l-5.345-7.002L3.5 22H1l7.004-8.01L2 2h6.92l4.857 6.417L18.244 2zm-2.394 18h1.888L8.063 4H6.09l9.76 16z"/>
+            </svg>
+          </a>
+          <a href="https://facebook.com/YOURPAGE"
+             target="_blank"
+             aria-label="Facebook"
+             class="text-gold hover:text-ivory/80 transition duration-300">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="currentColor"
+                 class="h-6 w-6">
+              <path d="M22 12a10 10 0 10-11.5 9.87v-6.99H7.9V12h2.6V9.8c0-2.57 1.54-3.99 3.9-3.99 1.13 0 2.31.2 2.31.2v2.54h-1.3c-1.28 0-1.68.79-1.68 1.6V12h2.86l-.46 2.88h-2.4v6.99A10 10 0 0022 12z"/>
+            </svg>
+          </a>
+          <a href="https://instagram.com/YOURUSERNAME"
+           target="_blank"
+           aria-label="Instagram"
+           class="text-gold hover:text-ivory/80 transition duration-300">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="currentColor"
+                 class="h-6 w-6">
+              <path d="M7.75 2C4.68 2 2 4.68 2 7.75v8.5C2 19.32 4.68 22 7.75 22h8.5C19.32 22 22 19.32 22 16.25v-8.5C22 4.68 19.32 2 16.25 2h-8.5zm8.25 2A3.75 3.75 0 0119.75 7.75v8.5A3.75 3.75 0 0116 20H8A3.75 3.75 0 014.25 16.25v-8.5A3.75 3.75 0 018 4h8zm-4 3.25A4.75 4.75 0 1016.75 12 4.76 4.76 0 0012 7.25zm0 7.5A2.75 2.75 0 1114.75 12 2.75 2.75 0 0112 14.75zm4.88-7.88a1.13 1.13 0 11-1.13-1.12 1.13 1.13 0 011.13 1.12z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/YOURNUMBER"
+           target="_blank"
+           aria-label="WhatsApp"
+           class="text-gold hover:text-ivory/80 transition duration-300">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="currentColor"
+                 class="h-6 w-6">
+              <path d="M20.52 3.48A11.86 11.86 0 0012.07 0C5.52 0 .16 5.36.16 11.91c0 2.1.55 4.15 1.6 5.96L0 24l6.31-1.66a11.83 11.83 0 005.76 1.48h.01c6.55 0 11.91-5.36 11.91-11.91 0-3.18-1.24-6.17-3.47-8.43zM12.08 21.8a9.84 9.84 0 01-5.01-1.37l-.36-.21-3.74.98.99-3.65-.24-.38a9.8 9.8 0 01-1.5-5.26c0-5.44 4.42-9.86 9.86-9.86 2.63 0 5.11 1.02 6.96 2.88a9.78 9.78 0 012.9 6.97c0 5.44-4.42 9.86-9.86 9.86zm5.39-7.37c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.77-1.67-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.48 0 1.45 1.07 2.86 1.22 3.05.15.2 2.1 3.2 5.1 4.49.71.31 1.27.5 1.7.64.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="bg-gray-900/20 p-8 rounded-3xl shadow-lift">
+        <form action="#" method="POST" class="space-y-6">
+
+          <div>
+            <label class="block text-sm font-medium mb-2" for="name">Full Name</label>
+            <input type="text" id="name" name="name" required
+                   class="w-full px-4 py-3 rounded-xl bg-black/50 text-ivory border border-gold/20 focus:border-gold focus:outline-none transition">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2" for="email">Email Address</label>
+            <input type="email" id="email" name="email" required
+                   class="w-full px-4 py-3 rounded-xl bg-black/50 text-ivory border border-gold/20 focus:border-gold focus:outline-none transition">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2" for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required
+                      class="w-full px-4 py-3 rounded-xl bg-black/50 text-ivory border border-gold/20 focus:border-gold focus:outline-none transition"></textarea>
+          </div>
+
+          <button type="submit"
+                  class="w-full px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+            Send Message
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<!-- <section id="contact" class="py-28 sm:py-36 text-center border-t border-gold/20">
+  <div class="max-w-3xl mx-auto px-6">
+    <h2 class="font-serif text-4xl text-gold mb-6">Let’s Create Something Timeless</h2>
+    <a href="https://wa.me/234XXXXXXXXXX"
+       class="inline-block px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+       Chat on WhatsApp
+    </a>
+  </div>
+</section> -->
+
+<footer class="py-10 text-center text-ivory/40 text-sm border-t border-gold/20">
+  © 2026 SBI Craft. Built with love — Kenzee.
+</footer>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>

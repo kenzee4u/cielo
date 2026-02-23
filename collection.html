@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBI Craft | Collection</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<style>
+body { background:#080808; color:#EDE8DD; }
+.blur-backdrop { backdrop-filter: blur(18px); }
+.thumb-active { border:2px solid #C6A75E; }
+.color-active { outline:2px solid #C6A75E; }
+</style>
+</head>
+
+<body class="font-sans" x-data="shop()">
+
+<!-- NAV -->
+<header x-data="{cartOpen:false}" class="fixed top-0 w-full bg-black/80 blur-backdrop border-b border-[#C6A75E]/20 z-50">
+<div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+<h1 class="font-serif text-2xl text-[#C6A75E]">SBI Craft</h1>
+
+<button @click="cartOpen = !cartOpen" class="text-[#C6A75E] relative">
+Cart <span x-text="cart.length" class="absolute -top-2 -right-3 bg-red-500 w-5 h-5 text-xs rounded-full flex items-center justify-center"></span>
+</button>
+
+<!-- CART DRAWER -->
+<div x-show="cartOpen" x-transition class="fixed inset-0 bg-black/80 z-50 flex justify-end">
+<div class="w-full sm:w-[420px] bg-[#111] p-8 border-l border-[#C6A75E]/20 space-y-6" @click.away="cartOpen=false">
+<h3 class="font-serif text-2xl text-[#C6A75E]">Your Cart</h3>
+
+<template x-if="cart.length === 0">
+<p class="text-gray-400">Your cart is empty.</p>
+</template>
+
+<template x-for="(item,index) in cart" :key="index">
+<div class="flex justify-between items-center border-b border-[#C6A75E]/20 py-4">
+<div>
+<p class="font-medium" x-text="item.name + ' (' + item.size + ', ' + item.color + ')'"></p>
+<p class="text-gray-400">₦<span x-text="item.price.toLocaleString()"></span></p>
+<div class="flex items-center gap-2 mt-2">
+<button @click="decreaseQty(index)" class="px-2 py-1 border border-gray-600 rounded">-</button>
+<span x-text="item.quantity"></span>
+<button @click="increaseQty(index)" class="px-2 py-1 border border-gray-600 rounded">+</button>
+</div>
+</div>
+<button @click="removeItem(index)" class="text-red-500 text-sm">Remove</button>
+</div>
+</template>
+
+<div class="mt-4 font-medium text-lg">
+Subtotal: ₦<span x-text="cartTotal.toLocaleString()"></span>
+</div>
+
+<button :disabled="cart.length === 0" class="w-full mt-4 px-8 py-4 bg-[#C6A75E] text-black rounded-full font-medium hover:scale-105 transition disabled:opacity-40">
+Checkout
+</button>
+</div>
+</div>
+
+</div>
+</header>
+
+<div class="pt-32"></div>
+
+<!-- COLLECTION GRID & MODAL -->
+<section class="max-w-7xl mx-auto px-6 pb-32">
+
+<h2 class="text-5xl font-serif text-center text-[#C6A75E] mb-20">The Collection</h2>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-14">
+
+<template x-for="product in products" :key="product.id">
+<div class="cursor-pointer group" @click="openModal(product)">
+<img :src="product.colors[Object.keys(product.colors)[0]][0]" class="rounded-3xl border border-[#C6A75E]/20 group-hover:scale-105 transition duration-700">
+<div class="mt-6 text-center">
+<h3 class="font-serif text-2xl" x-text="product.name"></h3>
+<p class="text-gray-400 mt-2">From ₦<span x-text="product.basePrice.toLocaleString()"></span></p>
+</div>
+</div>
+</template>
+
+</div>
+</section>
+
+<!-- MODAL -->
+<div x-show="modalOpen" class="fixed inset-0 bg-black/95 blur-backdrop flex items-center justify-center px-6 z-50 overflow-y-auto">
+
+<div @click.away="modalOpen=false" class="max-w-7xl w-full grid lg:grid-cols-2 gap-16 py-20">
+
+<!-- IMAGE -->
+<div class="space-y-4">
+<img :src="currentImages[currentImageIndex]" class="w-full h-[550px] object-cover rounded-3xl">
+<div class="flex gap-3 mt-2">
+<template x-for="(img,index) in currentImages">
+<img :src="img" @click="currentImageIndex=index" class="w-20 h-20 object-cover rounded-lg cursor-pointer" :class="index===currentImageIndex ? 'thumb-active' : ''">
+</template>
+</div>
+</div>
+
+<!-- DETAILS -->
+<div class="space-y-8">
+<button @click="modalOpen=false" class="text-[#C6A75E] text-sm uppercase">Close</button>
+<h2 class="font-serif text-4xl text-[#C6A75E]" x-text="selectedProduct.name"></h2>
+
+<!-- PRICE -->
+<p class="text-2xl">₦<span x-text="selectedSizeData.price.toLocaleString()"></span></p>
+
+<!-- SIZE -->
+<div>
+<p class="text-sm text-gray-400 mb-3">Select Size</p>
+<div class="flex gap-4">
+<template x-for="(data,size) in selectedProduct.sizes">
+<button @click="selectSize(size)" :disabled="data.stock === 0" :class="[selectedSize===size ? 'bg-[#C6A75E] text-black' : 'border border-[#C6A75E] text-[#C6A75E]', data.stock === 0 ? 'opacity-40 cursor-not-allowed' : '']" class="px-6 py-2 rounded-full text-sm transition">
+<span x-text="size"></span>
+</button>
+</template>
+</div>
+<p class="text-gray-400 mt-4">Dimensions: <span x-text="selectedSizeData.dimensions"></span></p>
+<p class="mt-2" :class="selectedSizeData.stock < 3 ? 'text-red-500' : 'text-gray-500'">
+<span x-show="selectedSizeData.stock === 0">Out of stock</span>
+<span x-show="selectedSizeData.stock > 0 && selectedSizeData.stock < 3">Only <span x-text="selectedSizeData.stock"></span> left</span>
+<span x-show="selectedSizeData.stock >= 3">In stock</span>
+</p>
+</div>
+
+<!-- COLOR -->
+<div>
+<p class="text-sm text-gray-400 mb-3">Select Color</p>
+<div class="flex gap-4">
+<template x-for="(images,color) in selectedProduct.colors">
+<div @click="changeColor(color)" :class="selectedColor===color ? 'color-active' : ''" class="w-8 h-8 rounded-full cursor-pointer" :style="'background:'+selectedProduct.colorHex[color]"></div>
+</template>
+</div>
+</div>
+
+<!-- ADD TO CART -->
+<button @click="addToCart()" :disabled="selectedSizeData.stock===0" class="w-full px-10 py-4 bg-[#C6A75E] text-black rounded-full font-medium hover:scale-105 transition disabled:opacity-40">
+Add to Cart
+</button>
+
+</div>
+</div>
+</div>
+
+<script>
+function shop(){
+return{
+modalOpen:false,
+selectedProduct:null,
+selectedColor:null,
+selectedSize:null,
+currentImageIndex:0,
+
+cart:[],
+
+products:[
+{
+id:1,
+name:'The Lagos Tote',
+basePrice:120000,
+colorHex:{Black:'#111', Brown:'#6B4226', Tan:'#C19A6B'},
+colors:{
+Black:['https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=900','https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=900','https://images.unsplash.com/photo-1611078481537-1c6d7e2f89de?q=80&w=900','https://images.unsplash.com/photo-1611078481537-1c6d7e2f89de?q=80&w=900'],
+Brown:['https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900','https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900','https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900','https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=900'],
+Tan:['https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=900','https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=900','https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=900','https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=900']
+},
+sizes:{
+Small:{price:120000,dimensions:'30cm x 22cm x 12cm',stock:5},
+Medium:{price:145000,dimensions:'36cm x 26cm x 14cm',stock:2},
+Large:{price:170000,dimensions:'42cm x 30cm x 16cm',stock:0}
+}
+}
+],
+
+get currentImages(){
+return this.selectedProduct ? this.selectedProduct.colors[this.selectedColor] : []
+},
+
+get selectedSizeData(){
+return this.selectedProduct ? this.selectedProduct.sizes[this.selectedSize] : {}
+},
+
+get cartTotal(){
+return this.cart.reduce((acc,item)=>acc+item.price*item.quantity,0)
+},
+
+openModal(product){
+this.selectedProduct=product
+this.selectedColor=Object.keys(product.colors)[0]
+this.selectedSize=Object.keys(product.sizes)[0]
+this.currentImageIndex=0
+this.modalOpen=true
+},
+
+changeColor(color){
+this.selectedColor=color
+this.currentImageIndex=0
+},
+
+selectSize(size){
+this.selectedSize=size
+},
+
+addToCart(){
+let existing = this.cart.find(i=>i.productId===this.selectedProduct.id && i.color===this.selectedColor && i.size===this.selectedSize)
+if(existing){
+existing.quantity++
+}else{
+this.cart.push({
+productId:this.selectedProduct.id,
+name:this.selectedProduct.name,
+color:this.selectedColor,
+size:this.selectedSize,
+price:this.selectedSizeData.price,
+quantity:1
+})
+}
+this.modalOpen=false
+},
+
+increaseQty(index){
+if(this.cart[index].quantity < this.selectedProduct.sizes[this.cart[index].size].stock){
+this.cart[index].quantity++
+}
+},
+
+decreaseQty(index){
+if(this.cart[index].quantity>1){
+this.cart[index].quantity--
+}
+},
+
+removeItem(index){
+this.cart.splice(index,1)
+}
+}
+}
+</script>
+
+</body>
+</html>

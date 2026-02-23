@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Queen</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+background:#050505;
+color:#EDE8DD;
+font-family:'Inter',sans-serif;
+height:100vh;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:2s ease;
+position:relative;
+}
+
+/* GOLD PARTICLES */
+canvas{
+position:absolute;
+top:0;
+left:0;
+z-index:0;
+}
+
+/* SECTION */
+.section{
+position:absolute;
+z-index:2;
+width:100%;
+max-width:900px;
+padding:40px;
+text-align:center;
+display:none;
+animation:fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(30px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+h1{
+font-family:'Playfair Display',serif;
+font-size:60px;
+color:#C6A75E;
+margin-bottom:20px;
+letter-spacing:2px;
+}
+
+/* LETTER ANIMATION */
+.letter span{
+opacity:0;
+display:inline-block;
+transform:translateY(20px);
+animation:rise 0.6s forwards;
+}
+
+@keyframes rise{
+to{opacity:1;transform:translateY(0);}
+}
+
+/* PHOTO */
+.photo-frame{
+width:220px;
+height:220px;
+border-radius:50%;
+margin:30px auto;
+border:3px solid #C6A75E;
+overflow:hidden;
+box-shadow:0 0 60px rgba(198,167,94,0.6);
+position:relative;
+}
+
+.photo-frame::after{
+content:"";
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+animation:shine 4s infinite;
+}
+
+@keyframes shine{
+0%{left:-100%;}
+50%{left:100%;}
+100%{left:100%;}
+}
+
+.photo-frame img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* TEXT */
+.line{
+opacity:0;
+transform:translateY(20px);
+transition:1s ease;
+}
+.line.show{
+opacity:1;
+transform:translateY(0);
+}
+.highlight{
+color:#C6A75E;
+font-weight:500;
+}
+
+/* BUTTON */
+button{
+margin-top:50px;
+padding:16px 50px;
+border-radius:40px;
+border:none;
+background:#C6A75E;
+color:black;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+transition:0.4s ease;
+}
+button:hover{
+transform:scale(1.08);
+box-shadow:0 0 25px rgba(198,167,94,0.6);
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<audio id="bgMusic" loop>
+<source src="{{ url_for('static', filename='vendor/images/happy.mp3') }}" type="audio/mpeg">
+</audio>
+
+<!-- SCENE 1 -->
+<div class="section" id="scene1" style="display:block;">
+
+<h1 class="letter" id="birthdayTitle"></h1>
+
+<div class="photo-frame">
+<img src="{{ url_for('static', filename='vendor/images/IMG_6790.jpeg') }}" alt="My Queen">
+</div>
+
+<div id="text1" style="font-size:20px; line-height:2;">
+<p class="line">Silver and gold I may not yet have in abundance…</p>
+<p class="line">but what I have, I give to you &darr;</p>
+<p class="line highlight">my vision. my growth. my becoming.</p>
+<p class="line">Today, I celebrate you.</p>
+<p class="line highlight">My Queen.</p>
+</div>
+
+<button onclick="nextScene()">Continue</button>
+</div>
+
+<!-- SCENE 2 -->
+<div class="section" id="scene2">
+
+<h1>This Is More</h1>
+
+<div id="text2" style="font-size:20px; line-height:2.1;">
+<p class="line">This is more than a website.</p>
+<p class="line">It’s not just design.</p>
+<p class="line">It’s not just products.</p>
+<p class="line">It’s not just business.</p>
+
+<p class="line highlight" style="margin-top:20px;">It is a channel.</p>
+
+<p class="line">A channel for your dreams…</p>
+<p class="line">your discipline…</p>
+<p class="line">your quiet sacrifices…</p>
+<p class="line">your ambition that many people don’t even see.</p>
+
+<p class="line" style="margin-top:20px;">
+I built this because I believe the world should experience &darr;
+</p>
+
+<p class="line highlight">your excellence.</p>
+
+<p class="line highlight" style="margin-top:20px;">
+And one day when it grows…
+we will remember that it started like this.
+</p>
+</div>
+
+<button onclick="launchSite()">Enter Your World</button>
+</div>
+
+<script>
+const music=document.getElementById("bgMusic");
+music.volume=0.5;
+
+window.addEventListener("load",()=>{
+music.play().catch(()=>{});
+animateLetters("Happy Birthday Cielo");
+revealText("text1");
+});
+
+/* LETTER BY LETTER */
+function animateLetters(text){
+let container=document.getElementById("birthdayTitle");
+container.innerHTML="";
+text.split("").forEach((char,i)=>{
+let span=document.createElement("span");
+span.textContent=char;
+span.style.animationDelay=(i*0.08)+"s";
+container.appendChild(span);
+});
+}
+
+/* TEXT REVEAL */
+function revealText(id){
+let lines=document.querySelectorAll("#"+id+" .line");
+lines.forEach((line,index)=>{
+setTimeout(()=>{line.classList.add("show");},800*index);
+});
+}
+
+function nextScene(){
+music.play();
+document.getElementById("scene1").style.display="none";
+document.getElementById("scene2").style.display="block";
+revealText("text2");
+}
+
+function launchSite(){
+document.body.style.opacity="0";
+setTimeout(()=>{
+window.location.href="collection.html";
+},2000);
+}
+
+/* PARTICLES */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2+1,
+d:Math.random()*1
+});
+}
+
+function drawParticles(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(198,167,94,0.7)";
+ctx.beginPath();
+for(let i=0;i<particles.length;i++){
+let p=particles[i];
+ctx.moveTo(p.x,p.y);
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+}
+ctx.fill();
+updateParticles();
+}
+
+function updateParticles(){
+for(let i=0;i<particles.length;i++){
+let p=particles[i];
+p.y+=p.d;
+if(p.y>canvas.height){
+p.y=0;
+p.x=Math.random()*canvas.width;
+}
+}
+}
+
+setInterval(drawParticles,33);
+</script>
+
+</body>
+</html>
