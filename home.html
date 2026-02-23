@@ -62,7 +62,7 @@ tailwind.config = {
 
     <!-- Desktop -->
     <div class="hidden lg:flex gap-10 text-ivory/80 text-sm tracking-wide">
-      <a href="#collection" class="hover:text-gold transition">Collection</a>
+      <a href="collection.html" class="hover:text-gold transition">Collection</a>
       <a href="#academy" class="hover:text-gold transition">Academy</a>
       <a href="#journey" class="hover:text-gold transition">Journey</a>
       <a href="#partner" class="hover:text-gold transition">Partner</a>
@@ -195,8 +195,8 @@ tailwind.config = {
 function heroCrossfade() {
   return {
     images: [
-      'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1400&q=80',
       'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1400&q=80'
     ],
@@ -382,7 +382,7 @@ function heroCrossfade() {
           <div class="relative aspect-square rounded-3xl overflow-hidden shadow-soft 
                       transition-all duration-500 group-hover:-translate-y-3 
                       group-hover:shadow-lift">
-            <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80" 
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80" 
                  class="w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-1000 ease-out">
             <div class="absolute inset-0 bg-gradient-to-tr from-gold/20 via-transparent to-transparent 
                         opacity-0 group-hover:opacity-100 transition duration-500"></div>
@@ -398,7 +398,7 @@ function heroCrossfade() {
           <div @click.away="open=false" class="bg-black rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl">
             <div class="relative">
               <button @click="open=false" class="absolute top-4 right-4 text-gold text-2xl font-bold">&times;</button>
-              <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80" class="w-full h-96 object-cover">
+              <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80" class="w-full h-96 object-cover">
             </div>
             <div class="p-6">
               <h3 class="text-2xl font-serif text-gold mb-2">The Statement Mini</h3>
@@ -416,7 +416,7 @@ function heroCrossfade() {
 
     <!-- EXPLORE BUTTON -->
     <div class="text-center mt-16 sm:mt-20">
-      <a href="/collection" class="inline-block px-12 py-4 rounded-full 
+      <a href="collection.html" class="inline-block px-12 py-4 rounded-full 
          bg-gold text-black font-medium shadow-lift hover:scale-105 transition duration-300">
         Explore Full Collection
       </a>
@@ -465,7 +465,7 @@ function heroCrossfade() {
                 class="relative w-full h-full cursor-pointer group"
               >
                 <img 
-                  src="academy-thumb.jpg"
+                  src="{{ url_for('static', filename='vendor/images/video_t.jpeg') }}"
                   alt="SBI Craft Academy"
                   class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 >
@@ -485,10 +485,11 @@ function heroCrossfade() {
             </template>
 
             <!-- Iframe -->
+            <!-- src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1" -->
             <template x-if="playing">
               <iframe
                 class="w-full h-full"
-                src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1"
+                src="https://www.youtube.com/embed/E_rwyu6cdmc?si=YtJ3z0IuB9v-tr86"
                 title="SBI Craft Academy Introduction"
                 frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -575,7 +576,7 @@ function heroCrossfade() {
 
           <!-- Image -->
           <div class="aspect-[4/5] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1593032465171-8f7f4c4e3c6b?q=80&w=800"
+            <img src="{{ url_for('static', filename='vendor/images/beginner.jpg') }}"
                  alt="Online Leather Course"
                  class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
           </div>
@@ -618,7 +619,7 @@ function heroCrossfade() {
           </div>
 
           <div class="aspect-[4/5] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800"
+            <img src="{{ url_for('static', filename='vendor/images/advanced.png') }}"
                  alt="Physical Leather Workshop"
                  class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
           </div>
@@ -659,7 +660,7 @@ function heroCrossfade() {
           </div>
 
           <div class="aspect-[4/5] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1616628182503-2d8e9f6f3e3d?q=80&w=800"
+            <img src="{{ url_for('static', filename='vendor/images/brand.jpg') }}"
                  alt="Hybrid Leather Course"
                  class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
           </div>
@@ -775,15 +776,15 @@ class="max-w-6xl mx-auto px-6 relative"
         </p>
 
         <!-- Primary CTA -->
-        <div class="flex sm:flex-row gap-4 items-start sm:items-center">
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
           
           <a href="#academy"
-             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             class="px-4 py-4 lg:px-10 lg:py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
              Enroll Now
           </a>
 
           <a href="/blog/student-to-brand-founder"
-             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             class="inline-block px-4 py-4 lg:px-10 lg:py-4 text-gold text-sm tracking-wide hover:underline transition">
              View More Stories →
           </a>
 
@@ -813,15 +814,15 @@ class="max-w-6xl mx-auto px-6 relative"
         </p>
 
         <!-- Primary CTA -->
-        <div class="flex sm:flex-row gap-4 items-start sm:items-center">
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
           
           <a href="#academy"
-             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             class="px-4 py-4 lg:px-10 lg:py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
              Enroll Now
           </a>
 
           <a href="/blog/student-to-brand-founder"
-             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             class="inline-block px-4 py-4 lg:px-10 lg:py-4 text-gold text-sm tracking-wide hover:underline transition">
              View More Stories →
           </a>
 
@@ -852,15 +853,15 @@ class="max-w-6xl mx-auto px-6 relative"
         </p>
 
         <!-- Primary CTA -->
-        <div class="flex sm:flex-row gap-4 items-start sm:items-center">
+        <div class="flex sm:flex-row gap-6 items-start sm:items-center">
           
           <a href="#academy"
-             class="px-10 py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
+             class="px-4 py-4 lg:px-10 lg:py-4 rounded-full bg-gold text-black font-medium tracking-wide shadow-lift hover:scale-105 transition duration-300">
              Enroll Now
           </a>
 
           <a href="/blog/student-to-brand-founder"
-             class="inline-block px-10 py-4 text-gold text-sm tracking-wide hover:underline transition">
+             class="inline-block px-4 py-4 lg:px-10 lg:py-4 text-gold text-sm tracking-wide hover:underline transition">
              View More Stories →
           </a>
 
@@ -935,11 +936,9 @@ class="max-w-6xl mx-auto px-6 relative"
   <div class="mt-24 max-w-6xl mx-auto text-center">
     <h4 class="font-serif text-2xl text-gold mb-8">Our Trusted Partners & Sponsors</h4>
     <div class="flex flex-wrap justify-center items-center gap-8">
-      <img src="https://via.placeholder.com/120x60?text=Brand+1" alt="Brand 1" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
-      <img src="https://via.placeholder.com/120x60?text=Brand+2" alt="Brand 2" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
-      <img src="https://via.placeholder.com/120x60?text=Brand+3" alt="Brand 3" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
-      <img src="https://via.placeholder.com/120x60?text=Brand+4" alt="Brand 4" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
-      <img src="https://via.placeholder.com/120x60?text=Brand+5" alt="Brand 5" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="{{ url_for('static', filename='vendor/images/world_bank_logo.jpg') }}" alt="Brand 1" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="{{ url_for('static', filename='vendor/images/ideas_logo.jpg') }}" alt="Brand 2" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
+      <img src="{{ url_for('static', filename='vendor/images/Federal_Ministry_Education.jpg') }}" alt="Brand 3" class="h-12 object-contain grayscale hover:grayscale-0 transition duration-300">
     </div>
   </div>
 
